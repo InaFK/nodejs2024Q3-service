@@ -45,7 +45,7 @@ export class UsersController {
   @Put(':id')
   update(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
     if (!isUUID(id)) throw new BadRequestException('Invalid user ID');
-    // Convert updatePasswordDto to Partial<User> and pass to the service
+
   const updateFields: Partial<User> = {
     password: updatePasswordDto.newPassword, // Update only the password
   };
