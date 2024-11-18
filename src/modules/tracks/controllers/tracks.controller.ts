@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode } from '@nestjs/common';
 import { TracksService } from '../services/tracks.service';
 import { Track } from '../entities/track.entity';
+import { CreateTrackDto } from '../dto/create-track.dto';
+import { UpdateTrackDto } from '../dto/update-track.dto';
 
-@Controller('track')
+@Controller('tracks')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
@@ -18,12 +20,12 @@ export class TracksController {
 
   @Post()
   @HttpCode(201)
-  createTrack(@Body() trackData: Partial<Track>): Track {
+  createTrack(@Body() trackData: CreateTrackDto): Track {
     return this.tracksService.create(trackData);
   }
 
   @Put(':id')
-  updateTrack(@Param('id') id: string, @Body() updateData: Partial<Track>): Track {
+  updateTrack(@Param('id') id: string, @Body() updateData: UpdateTrackDto): Track {
     return this.tracksService.update(id, updateData);
   }
 

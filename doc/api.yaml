@@ -89,6 +89,25 @@ components:
         - id
         - name
         - duration
+    CreateTrackDto:
+      type: object
+      properties:
+        name:
+          type: string
+        artistId:
+          type: string
+          format: uuid
+          nullable: true
+        albumId:
+          type: string
+          format: uuid
+          nullable: true
+        duration:
+          type: integer
+          description: In seconds
+      required:
+        - name
+        - duration
     Favorites:
       type: object
       properties:
@@ -262,7 +281,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         400:
-          description: Bad request. body does not contain required fields
+          description: Bad request. Body does not contain required fields
         401:
           $ref: '#/components/responses/UnauthorizedError'
   /users/{userId}:
@@ -272,6 +291,7 @@ paths:
         required: true
         schema:
           type: string
+          format: uuid
     get:
       tags:
         - Users
@@ -285,12 +305,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         400:
-          description: Bad request. userId is invalid (not uuid)
+          description: Bad request. Invalid UUID format.
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
           description: User not found
-
     put:
       tags:
         - Users
@@ -387,22 +406,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                artistId:
-                  type: string
-                  format: uuid
-                albumId:
-                  type: string
-                  format: uuid
-                duration:
-                  type: integer
-                  description: In seconds
-              required:
-                - name
-                - duration
+              $ref: '#/components/schemas/CreateTrackDto'
       responses:
         201:
           description: Successful operation

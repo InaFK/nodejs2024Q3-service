@@ -19,11 +19,14 @@ import { User } from '../entities/user.entity';
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
   @Get()
-  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
   }
 
   @Get(':id')
@@ -32,29 +35,18 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUserDto: CreateUserDto) {
-    if (!createUserDto.login || !createUserDto.password) {
-      throw new BadRequestException('Login and password are required');
-    }
-    const { login, password } = createUserDto;
-    return this.usersService.create(login, password);
-  }
-
   @Put(':id')
-  update(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ): Partial<User> {
     if (!isUUID(id)) throw new BadRequestException('Invalid user ID');
-
-  const updateFields: Partial<User> = {
-    password: updatePasswordDto.newPassword, // Update only the password
-  };
-    return this.usersService.update(id, updateFields);
+    return this.usersService.updatePassword(id, updatePasswordDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): void {
     if (!isUUID(id)) throw new BadRequestException('Invalid user ID');
     this.usersService.remove(id);
   }
