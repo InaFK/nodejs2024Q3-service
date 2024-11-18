@@ -104,9 +104,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Track'
+    CreateArtistDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Freddie Mercury"
+        grammy:
+          type: boolean
+          example: false
+      required:
+        - name
+        - grammy
+    UpdateArtistDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Freddie Mercury"
+        grammy:
+          type: boolean
+          example: true
+      required:
+        - name
+        - grammy
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
+    NotFoundError:
+      description: "Resource not found."
   securitySchemes:
     bearerAuth:
       type: http
@@ -649,6 +675,7 @@ paths:
           application/json:
             schema:
               type: object
+              $ref: '#/components/schemas/CreateArtistDto'
               properties:
                 name:
                   type: string
@@ -705,6 +732,7 @@ paths:
           application/json:
             schema:
               type: object
+              $ref: '#/components/schemas/UpdateArtistDto'
               properties:
                 name:
                   type: string
