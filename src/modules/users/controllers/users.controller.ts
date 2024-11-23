@@ -7,14 +7,11 @@ import {
   Param,
   Body,
   HttpCode,
-  HttpStatus,
-  BadRequestException,
+  ValidationPipe
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdatePasswordDto } from '../dto/update-password.dto';
-import { isUUID } from 'class-validator';
-import { User } from '../entities/user.entity';
 
 @Controller('user')
 export class UsersController {
@@ -24,31 +21,29 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
-    if (!isUUID(id)) throw new BadRequestException('Invalid user ID');
     return this.usersService.findOne(id);
   }
 
+  @Post()
+  @HttpCode(201)
+  create(@Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })) createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+
   @Put(':id')
+  @HttpCode(201)
   update(
     @Param('id') id: string,
-    @Body() updatePasswordDto: UpdatePasswordDto,
-  ): Partial<User> {
-    if (!isUUID(id)) throw new BadRequestException('Invalid user ID');
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })) updatePasswordDto: UpdatePasswordDto,
+  ) {
     return this.usersService.updatePassword(id, updatePasswordDto);
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string): void {
-    if (!isUUID(id)) throw new BadRequestException('Invalid user ID');
+  @HttpCode(204)
+  remove(@Param('id') id: string) {
     this.usersService.remove(id);
   }
 }
-

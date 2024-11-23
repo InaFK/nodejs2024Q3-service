@@ -1,8 +1,9 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { UsersRepository } from '../repositories/users.repository';
 import { UserResponse } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdatePasswordDto } from '../dto/update-password.dto';
+import { validate as isUUID } from 'uuid';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +23,7 @@ export class UsersService {
    * @returns UserResponse
    */
   findOne(id: string): UserResponse {
+    this.validateUUID(id);
     const user = this.usersRepository.findById(id);
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -54,7 +56,9 @@ export class UsersService {
    * @returns Updated UserResponse
    */
   updatePassword(id: string, updatePasswordDto: UpdatePasswordDto): UserResponse {
-    const { oldPassword, newPassword } = updatePasswordDto;
+     const { oldPassword, newPassword } = updatePasswordDto;
+
+    this.validateUUID(id);
 
     const user = this.usersRepository.findById(id);
     if (!user) {
@@ -63,7 +67,8 @@ export class UsersService {
 
     //- validate old password
     if (user.password !== oldPassword) {
-      throw new BadRequestException('Old password is incorrect');
+      // throw new BadRequestException('Old password is incorrect');
+      throw new ForbiddenException('Old password is incorrect');
     }
 
     const updatedUser = this.usersRepository.updateUser(id, { password: newPassword });
@@ -75,10 +80,19 @@ export class UsersService {
    * @param id User ID
    */
   remove(id: string): void {
+    this.validateUUID(id);
+  
     const user = this.usersRepository.findById(id);
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+  
     this.usersRepository.deleteUser(id);
+  }  
+
+  private validateUUID(id: string): void {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid user ID');
+    }
   }
 }
