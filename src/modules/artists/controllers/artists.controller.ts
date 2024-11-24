@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { ArtistsService } from '../services/artists.service';
 import { Artist } from '../entities/artist.entity';
 
@@ -17,7 +25,10 @@ export class ArtistsController {
   }
 
   @Post()
-  createArtist(@Body('name') name: string, @Body('grammy') grammy: boolean): Artist {
+  createArtist(
+    @Body('name') name: string,
+    @Body('grammy') grammy: boolean,
+  ): Artist {
     return this.artistsService.createArtist(name, grammy);
   }
 

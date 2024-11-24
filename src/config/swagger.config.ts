@@ -4,7 +4,9 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
 export function setupSwagger(app: INestApplication): void {
-  const apiDocument = yaml.load(fs.readFileSync('./doc/api.yaml', 'utf8')) as object;
+  const apiDocument = yaml.load(
+    fs.readFileSync('./doc/api.yaml', 'utf8'),
+  ) as object;
 
   const options = new DocumentBuilder()
     .setTitle('Home Library Service')
@@ -13,5 +15,7 @@ export function setupSwagger(app: INestApplication): void {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document, { swaggerOptions: { spec: apiDocument } });
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: { spec: apiDocument },
+  });
 }

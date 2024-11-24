@@ -7,7 +7,7 @@ import {
   Param,
   Body,
   HttpCode,
-  ValidationPipe
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -28,7 +28,10 @@ export class UsersController {
 
   @Post()
   @HttpCode(201)
-  create(@Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })) createUserDto: CreateUserDto) {
+  create(
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    createUserDto: CreateUserDto,
+  ) {
     return this.usersService.create(createUserDto);
   }
 
@@ -36,7 +39,8 @@ export class UsersController {
   @HttpCode(201)
   update(
     @Param('id') id: string,
-    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })) updatePasswordDto: UpdatePasswordDto,
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+    updatePasswordDto: UpdatePasswordDto,
   ) {
     return this.usersService.updatePassword(id, updatePasswordDto);
   }

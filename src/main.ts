@@ -6,7 +6,6 @@ import { ValidationPipe } from '@nestjs/common';
 
 config();
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setupSwagger(app);
@@ -19,7 +18,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  
 }
 
 bootstrap();

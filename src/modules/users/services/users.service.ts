@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { UsersRepository } from '../repositories/users.repository';
 import { UserResponse } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -55,8 +60,11 @@ export class UsersService {
    * @param updatePasswordDto DTO containing old and new passwords
    * @returns Updated UserResponse
    */
-  updatePassword(id: string, updatePasswordDto: UpdatePasswordDto): UserResponse {
-     const { oldPassword, newPassword } = updatePasswordDto;
+  updatePassword(
+    id: string,
+    updatePasswordDto: UpdatePasswordDto,
+  ): UserResponse {
+    const { oldPassword, newPassword } = updatePasswordDto;
 
     this.validateUUID(id);
 
@@ -71,7 +79,9 @@ export class UsersService {
       throw new ForbiddenException('Old password is incorrect');
     }
 
-    const updatedUser = this.usersRepository.updateUser(id, { password: newPassword });
+    const updatedUser = this.usersRepository.updateUser(id, {
+      password: newPassword,
+    });
     return updatedUser.toResponse();
   }
 
@@ -81,14 +91,14 @@ export class UsersService {
    */
   remove(id: string): void {
     this.validateUUID(id);
-  
+
     const user = this.usersRepository.findById(id);
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-  
+
     this.usersRepository.deleteUser(id);
-  }  
+  }
 
   private validateUUID(id: string): void {
     if (!isUUID(id)) {

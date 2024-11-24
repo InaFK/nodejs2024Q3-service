@@ -10,7 +10,7 @@ export class TracksRepository {
   }
 
   findById(id: string): Track | undefined {
-    return this.tracks.find(track => track.id === id);
+    return this.tracks.find((track) => track.id === id);
   }
 
   create(track: Partial<Track>): Track {
@@ -20,7 +20,7 @@ export class TracksRepository {
   }
 
   update(id: string, updateData: Partial<Track>): Track | undefined {
-    const trackIndex = this.tracks.findIndex(track => track.id === id);
+    const trackIndex = this.tracks.findIndex((track) => track.id === id);
     if (trackIndex === -1) return undefined;
 
     this.tracks[trackIndex] = { ...this.tracks[trackIndex], ...updateData };
@@ -29,7 +29,7 @@ export class TracksRepository {
 
   delete(id: string): boolean {
     const initialLength = this.tracks.length;
-    this.tracks = this.tracks.filter(track => track.id !== id);
+    this.tracks = this.tracks.filter((track) => track.id !== id);
     return this.tracks.length < initialLength;
   }
 }

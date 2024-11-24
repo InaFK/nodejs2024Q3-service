@@ -11,7 +11,7 @@ export class AlbumsRepository {
   }
 
   findById(id: string): Album | undefined {
-    return this.albums.find(album => album.id === id);
+    return this.albums.find((album) => album.id === id);
   }
 
   create(albumData: Omit<Album, 'id'>): Album {
@@ -29,7 +29,7 @@ export class AlbumsRepository {
   }
 
   delete(id: string): boolean {
-    const index = this.albums.findIndex(album => album.id === id);
+    const index = this.albums.findIndex((album) => album.id === id);
     if (index === -1) return false;
 
     this.albums.splice(index, 1);

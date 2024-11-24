@@ -10,7 +10,6 @@
 //   password: string;
 // }
 
-
 import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {

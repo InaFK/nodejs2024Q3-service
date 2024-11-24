@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { validate as isUuid } from 'uuid';
 import { Artist } from '../entities/artist.entity';
 import { ArtistsRepository } from '../repositories/artists.repository';
