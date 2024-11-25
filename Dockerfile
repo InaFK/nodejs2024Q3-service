@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base
-FROM node:20-alpine
+FROM node:18 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -10,9 +10,16 @@ RUN npm install
 
 # Copy application code
 COPY . .
+RUN npx prisma generate
+
+FROM node:alpine AS main
+
+WORKDIR /app
+
+COPY --from=build /app /app
 
 # Expose the application port
-EXPOSE 3000
+EXPOSE ${PORT}
 
 # Command to start the application
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]
