@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone {https://github.com/InaFK/nodejs2024Q3-service}
 ```
 
 ## Installing NPM modules
